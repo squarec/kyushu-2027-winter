@@ -540,6 +540,12 @@
     <div class="day-pill" onclick="jumpToDay('d6')"><div class="d">Day 6 (1/26 二)</div><div class="r">博多站採買→機場</div><div class="h">✈️ 無住宿</div></div>
   </div>
 
+  <div class="section-title">🗺️ 旅遊路線地圖</div>
+  <div class="map-view-card" style="margin-bottom:20px;">
+    <img class="map-view-img" id="dashMapImg" alt="九州旅遊路線手繪地圖：福岡、柳川、太宰府、下關、門司港、別府、宇佐神宮" onclick="openMapModal(this.src)">
+    <div class="map-view-desc">🎨 點擊圖片可放大觀看（示意圖，非實際比例）</div>
+  </div>
+
   <div class="section-title">🛣️ 路線走法</div>
   <div class="route-box">
     福岡 →（南）柳川・太宰府 → 回博多 →（北）下關・門司 →（沿海岸東九州道）別府（D4 在附近玩）→ 宇佐（回程順路）→ 回福岡。<br>
@@ -1111,6 +1117,9 @@
 </div>
 
 <script>
+  // 總覽頁的地圖共用地圖分頁的圖片資料，避免檔案重複嵌入
+  document.getElementById('dashMapImg').src = document.getElementById('mapImg').src;
+
   // Map modal zoom functions
   function openMapModal(imgSrc) {
     document.getElementById('imgModalTarget').src = imgSrc;
