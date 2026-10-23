@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>九州 2027 冬季慢遊自駕｜隨身手冊</title>
+<style>
+  :root {
+    --primary: #2563eb; --primary-light: #dbeafe; --primary-dark: #1d4ed8;
+    --accent: #0891b2; --green: #16a34a; --green-light: #dcfce7;
+    --orange: #ea580c; --orange-light: #ffedd5; --purple: #7c3aed; --purple-light: #ede9fe;
+    --red: #dc2626; --yellow: #ca8a04; --yellow-light: #fef9c3;
+    --gray-light: #f3f4f6; --border: #e5e7eb; --text: #111827; --text-muted: #6b7280;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif;
+    background: #f0f4f8; color: var(--text); line-height: 1.6; padding-bottom: 70px;
+  }
+  .hero {
+    background: linear-gradient(135deg, #7c2d12 0%, #ea580c 50%, #0891b2 100%);
+    color: white; padding: 32px 16px 40px; text-align: center;
+  }
+  .hero h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 0.95rem; opacity: 0.9; margin-bottom: 12px; }
+  .hero-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+  .hero-badge {
+    background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 20px; padding: 3px 10px; font-size: 0.78rem; font-weight: 500;
+  }
+  .tab-content { display: none; max-width: 860px; margin: 0 auto; padding: 16px; animation: fadeIn 0.25s ease-in-out; }
+  .tab-content.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .nav-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 1000;
+  }
+  .nav-btn {
+    flex: 1; border: none; background: none; padding: 10px 0; color: var(--text-muted);
+    font-size: 0.75rem; font-weight: 600; cursor: pointer; display: flex; flex-direction: column;
+    align-items: center; gap: 4px; transition: all 0.15s ease;
+  }
+  .nav-btn .nav-icon { font-size: 1.4rem; }
+  .nav-btn.active { color: var(--primary); background: var(--primary-light); }
+  @media (min-width: 768px) {
+    .nav-bar { position: sticky; top: 0; bottom: auto; box-shadow: 0 2px 8px rgba(0,0,0,0.08); justify-content: center; }
+    .nav-btn { max-width: 160px; padding: 12px 0; font-size: 0.85rem; flex-direction: row; justify-content: center; gap: 8px; }
+    body { padding-bottom: 0; }
+  }
+
+  .stat-bar {
+    background: white; border-radius: 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    display: grid; grid-template-columns: repeat(4, 1fr); overflow: hidden; margin-bottom: 20px;
+  }
+  .stat-item { padding: 14px 8px; text-align: center; border-right: 1px solid var(--border); }
+  .stat-item:last-child { border-right: none; }
+  .stat-item .num { font-size: 1.3rem; font-weight: 800; color: var(--primary); }
+  .stat-item .lbl { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
+
+  .section-title {
+    font-size: 1.05rem; font-weight: 700; margin: 20px 4px 10px; color: #7c2d12;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .cards { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 600px) { .cards { grid-template-columns: 1fr 1fr; } }
+  .card {
+    background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 16px;
+    cursor: pointer; display: flex; flex-direction: column; gap: 6px; border: 1px solid transparent; transition: all 0.2s;
+  }
+  .card:hover { border-color: var(--primary-light); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37,99,235,0.1); }
+  .card .icon { font-size: 1.6rem; }
+  .card .title { font-size: 0.95rem; font-weight: 700; }
+  .card .desc { font-size: 0.78rem; color: var(--text-muted); }
+  .card .tag { align-self: flex-start; font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 10px; margin-top: 4px; }
+  .tag-itinerary { background: var(--primary-light); color: var(--primary); }
+  .tag-checklist { background: var(--green-light); color: var(--green); }
+
+  .day-strip {
+    background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 14px;
+    overflow-x: auto; white-space: nowrap; margin-bottom: 20px; -webkit-overflow-scrolling: touch;
+  }
+  .day-pill {
+    display: inline-block; vertical-align: top; width: 140px; white-space: normal; background: var(--gray-light);
+    border-radius: 8px; padding: 8px 10px; margin-right: 8px; font-size: 0.75rem; cursor: pointer; transition: all 0.15s;
+  }
+  .day-pill:hover { background: var(--primary-light); }
+  .day-pill .d { font-weight: 700; color: var(--primary); }
+  .day-pill .r { color: var(--text-muted); margin-top: 2px; }
+  .day-pill .h { color: var(--orange); margin-top: 4px; font-weight: 600; }
+
+  .day-card { background: white; border-radius: 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); margin-bottom: 20px; overflow: hidden; }
+  .day-header { padding: 14px 18px; display: flex; align-items: center; gap: 12px; background: var(--gray-light); }
+  .day-num {
+    background: var(--primary); color: white; border-radius: 50%; width: 38px; height: 38px;
+    display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700;
+    flex-shrink: 0; line-height: 1.1; text-align: center;
+  }
+  .day-title { flex: 1; }
+  .day-title h2 { font-size: 0.95rem; font-weight: 700; }
+  .day-title .day-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 1px; }
+  .day-transport {
+    background: #fafafa; padding: 6px 18px; font-size: 0.78rem; color: var(--text-muted);
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  }
+  .day-transport strong { color: var(--text); }
+  .schedule { padding: 0 16px; }
+  .schedule-row { display: flex; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--border); gap: 10px; }
+  .schedule-row:last-child { border-bottom: none; }
+  .time-col { width: 48px; flex-shrink: 0; font-size: 0.8rem; font-weight: 700; color: var(--primary); }
+  .event-col { flex: 1; font-size: 0.82rem; line-height: 1.4; }
+  .event-tag { display: inline-block; font-size: 0.65rem; font-weight: 600; padding: 1px 6px; border-radius: 8px; margin-right: 4px; }
+  .tag-food    { background: #fef3c7; color: #92400e; }
+  .tag-sight   { background: #dbeafe; color: #1e40af; }
+  .tag-hotel   { background: #f3e8ff; color: #6b21a8; }
+  .tag-move    { background: #f0fdf4; color: #166534; }
+  .tag-onsen   { background: #fce7f3; color: #9d174d; }
+  .tag-nature  { background: #ecfdf5; color: #065f46; }
+  .tips-box {
+    margin: 12px; background: var(--yellow-light); border-left: 3px solid #ca8a04; border-radius: 4px;
+    padding: 8px 12px; font-size: 0.78rem;
+  }
+  .tips-box .tips-title { font-weight: 700; color: #854d0e; margin-bottom: 2px; }
+  .hotel-block { margin: 12px; background: var(--purple-light); border-radius: 6px; padding: 8px 12px; font-size: 0.78rem; }
+  .hotel-block .hotel-title { font-weight: 700; color: var(--purple); margin-bottom: 2px; }
+  .highlight-row { background: linear-gradient(90deg, #fdf2f8, #ede9fe); }
+
+  .section { background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 16px; overflow: hidden; }
+  .section-header {
+    padding: 12px 16px; font-size: 0.95rem; font-weight: 700; background: var(--primary-light); color: #1e3a5f;
+    display: flex; align-items: center; gap: 8px;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 0.8rem; background: white; }
+  th, td { padding: 8px 12px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+  th { background: var(--gray-light); font-size: 0.72rem; color: var(--text-muted); font-weight: 600; }
+  tr:last-child td { border-bottom: none; }
+  .status { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; }
+  .status input[type=checkbox] { width: 16px; height: 16px; cursor: pointer; accent-color: var(--green); }
+  .badge-done { color: var(--green); font-size: 0.72rem; }
+  .badge-todo { color: var(--orange); font-size: 0.72rem; }
+  .footer-note { text-align: center; color: var(--text-muted); font-size: 0.75rem; padding: 16px; }
+
+  .warn-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  @media (min-width: 700px) { .warn-grid { grid-template-columns: 1fr 1fr; } }
+  .warn-card {
+    background: white; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 12px 14px;
+    display: flex; gap: 10px; font-size: 0.8rem; border-left: 3px solid var(--orange);
+  }
+  .warn-num { font-weight: 800; color: var(--orange); font-size: 1rem; }
+
+  .itinerary-nav {
+    background: white; padding: 8px 0; margin-bottom: 12px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    overflow-x: auto; white-space: nowrap; position: sticky; top: 0; z-index: 50; -webkit-overflow-scrolling: touch;
+  }
+  .itinerary-nav a {
+    display: inline-block; padding: 4px 10px; font-size: 0.75rem; text-decoration: none; color: var(--text-muted);
+    font-weight: 600; border-radius: 12px; margin: 0 2px;
+  }
+  .itinerary-nav a:hover, .itinerary-nav a.active { background: var(--primary); color: white; }
+
+  .map-view-card { background: white; border-radius: 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); padding: 16px; text-align: center; }
+  .map-view-card svg { width: 100%; height: auto; border-radius: 8px; background: #e0f2fe; }
+  .map-legend { display: flex; flex-wrap: wrap; gap: 8px 14px; justify-content: center; margin-top: 12px; font-size: 0.78rem; }
+  .map-legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .map-legend i { display: inline-block; width: 18px; height: 4px; border-radius: 2px; }
+  .map-desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>♨️ 九州 2027 冬季慢遊自駕</h1>
+  <div class="subtitle">1/21（四）～ 1/26（二）｜福岡・別府・大分｜三代同行・慢活溫泉之旅</div>
+  <div class="hero-badges">
+    <span class="hero-badge">👨‍👩‍👧‍👦 6 人（含長輩 80 歲・小孩 8 歲）</span>
+    <span class="hero-badge">🚗 Day 2–5 自駕（博多取還・避開山區）</span>
+    <span class="hero-badge">♨️ 別府溫泉 2 晚</span>
+    <span class="hero-badge">📅 共 6 天 5 夜</span>
+  </div>
+</div>
+
+<div class="nav-bar">
+  <button class="nav-btn active" onclick="switchTab('tab-dashboard', this)"><span class="nav-icon">📊</span><span>總覽</span></button>
+  <button class="nav-btn" onclick="switchTab('tab-map', this)"><span class="nav-icon">🗺️</span><span>地圖</span></button>
+  <button class="nav-btn" onclick="switchTab('tab-itinerary', this)"><span class="nav-icon">📅</span><span>詳細行程</span></button>
+  <button class="nav-btn" onclick="switchTab('tab-checklist', this)"><span class="nav-icon">✅</span><span>檢查清單</span></button>
+</div>
+
+<!-- ==================== TAB 1: DASHBOARD ==================== -->
+<div id="tab-dashboard" class="tab-content active">
+  <div class="stat-bar">
+    <div class="stat-item"><div class="num">6</div><div class="lbl">天數</div></div>
+    <div class="stat-item"><div class="num">2</div><div class="lbl">換飯店次數</div></div>
+    <div class="stat-item"><div class="num">4</div><div class="lbl">自駕天數</div></div>
+    <div class="stat-item"><div class="num">2</div><div class="lbl">晚別府溫泉</div></div>
+  </div>
+
+  <div class="section-title">📅 每日行程快覽</div>
+  <div class="day-strip">
+    <div class="day-pill" onclick="jumpToDay('d1')"><div class="d">Day 1 (1/21)</div><div class="r">抵達福岡・博多周邊（不租車）</div><div class="h">🏨 博多</div></div>
+    <div class="day-pill" onclick="jumpToDay('d2')"><div class="d">Day 2 (1/22)</div><div class="r">取車→柳川暖桌遊船→太宰府</div><div class="h">🏨 博多（同間）</div></div>
+    <div class="day-pill" onclick="jumpToDay('d3')"><div class="d">Day 3 (1/23)</div><div class="r">（選配：下關）→小倉→別府</div><div class="h">🏨 別府</div></div>
+    <div class="day-pill" onclick="jumpToDay('d4')"><div class="d">Day 4 (1/24)</div><div class="r">海たまご・地獄巡禮（＋自由選）</div><div class="h">🏨 別府</div></div>
+    <div class="day-pill" onclick="jumpToDay('d5')"><div class="d">Day 5 (1/25)</div><div class="r">宇佐神宮→回博多還車</div><div class="h">🏨 博多（同間）</div></div>
+    <div class="day-pill" onclick="jumpToDay('d6')"><div class="d">Day 6 (1/26)</div><div class="r">博多購物→福岡機場</div><div class="h">✈️ 無住宿</div></div>
+  </div>
+
+  <div class="section-title">📂 隨身指南</div>
+  <div class="cards">
+    <div class="card" onclick="switchTab('tab-itinerary')">
+      <div class="icon">🗺️</div><div class="title">詳細行程表</div>
+      <div class="desc">交通工具、每日時間表、餐食、神社與溫泉指引</div>
+      <span class="tag tag-itinerary">去詳細行程</span>
+    </div>
+    <div class="card" onclick="switchTab('tab-map')">
+      <div class="icon">🖼️</div><div class="title">路線地圖</div>
+      <div class="desc">Day 1–6 行駛路線與各站位置示意圖（下關為選配）</div>
+      <span class="tag tag-itinerary">看路線地圖</span>
+    </div>
+    <div class="card" onclick="switchTab('tab-checklist')">
+      <div class="icon">✅</div><div class="title">旅遊檢查清單</div>
+      <div class="desc">證件、駕照譯本、租車冬胎、長輩用品勾選表</div>
+      <span class="tag tag-checklist">去檢查清單</span>
+    </div>
+  </div>
+
+  <div class="footer-note" style="margin-top:20px;">
+    最後更新時間：2026-10-23<br>
+    💡 本網頁為單檔離線版，可直接在手機瀏覽。航班與住宿確定後請更新。
+  </div>
+</div>
+
+<!-- ==================== TAB: MAP ==================== -->
+<div id="tab-map" class="tab-content">
+  <div class="map-view-card">
+    <svg viewBox="0 0 760 490" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="九州北部路線示意圖">
+  <path d="M40,170 L100,140 L140,118 L200,95 L280,85 L340,100 L420,140 L480,165 L540,150 L620,110 L680,105 L700,150 L660,190 L630,240 L572,296 L590,322 L630,335 L650,380 L720,450 L740,490 L40,490 Z" fill="#fef3c7" stroke="#a16207" stroke-width="2"/>
+  <text x="150" y="60" font-size="13" fill="#0369a1">玄界灘</text>
+  <text x="600" y="62" font-size="13" fill="#0369a1">周防灘</text>
+  <text x="672" y="410" font-size="13" fill="#0369a1">別府灣</text>
+  <text x="300" y="400" font-size="14" fill="#a16207" opacity="0.7">九州（示意）</text>
+  <polyline points="128,149 110,200 120,255 150,222 168,186 128,149" fill="none" stroke="#ea580c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <polyline points="255,118 292,62 345,120" fill="none" stroke="#9ca3af" stroke-width="4" stroke-dasharray="3 8" stroke-linecap="round" stroke-linejoin="round"/>
+  <polyline points="128,149 200,125 255,118 345,120 430,160 500,180 540,250 556,310" fill="none" stroke="#16a34a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <polyline points="556,310 592,326" fill="none" stroke="#7c3aed" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round"/>
+  <polyline points="560,318 520,255 490,190 420,170 350,132 270,128 205,138 134,158" fill="none" stroke="#0891b2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <g><circle cx="128" cy="149" r="6" fill="#fff" stroke="#111827" stroke-width="2.5"/><text x="118" y="135" text-anchor="end" font-size="15" font-weight="700" fill="#111827" stroke="#fff" stroke-width="3" paint-order="stroke">博多</text><circle cx="168" cy="186" r="6" fill="#fff" stroke="#111827" stroke-width="2.5"/><text x="180" y="200" text-anchor="start" font-size="15" font-weight="700" fill="#111827" stroke="#fff" stroke-width="3" paint-order="stroke">太宰府</text><circle cx="120" cy="255" r="6" fill="#fff" stroke="#111827" stroke-width="2.5"/><text x="132" y="270" text-anchor="start" font-size="15" font-weight="700" fill="#111827" stroke="#fff" stroke-width="3" paint-order="stroke">柳川</text><circle cx="292" cy="62" r="6" fill="#fff" stroke="#6b7280" stroke-width="2.5" stroke-dasharray="3 2"/><text x="304" y="56" text-anchor="start" font-size="15" font-weight="700" fill="#6b7280" stroke="#fff" stroke-width="3" paint-order="stroke">下關（選配）</text><circle cx="345" cy="120" r="6" fill="#fff" stroke="#111827" stroke-width="2.5"/><text x="357" y="112" text-anchor="start" font-size="15" font-weight="700" fill="#111827" stroke="#fff" stroke-width="3" paint-order="stroke">小倉</text><circle cx="500" cy="180" r="6" fill="#fff" stroke="#111827" stroke-width="2.5"/><text x="490" y="168" text-anchor="end" font-size="15" font-weight="700" fill="#111827" stroke="#fff" stroke-width="3" paint-order="stroke">宇佐神宮</text><circle cx="556" cy="310" r="6" fill="#fff" stroke="#111827" stroke-width="2.5"/><text x="526" y="298" text-anchor="end" font-size="15" font-weight="700" fill="#111827" stroke="#fff" stroke-width="3" paint-order="stroke">別府</text><circle cx="592" cy="326" r="6" fill="#fff" stroke="#111827" stroke-width="2.5"/><text x="604" y="348" text-anchor="start" font-size="15" font-weight="700" fill="#111827" stroke="#fff" stroke-width="3" paint-order="stroke">海たまご</text></g>
+</svg>
+    <div class="map-legend">
+      <span><i style="background:#ea580c"></i>D2 博多→柳川→太宰府→博多</span>
+      <span><i style="background:#16a34a"></i>D3 博多→小倉→別府（東九州道）</span>
+      <span><i style="background:#9ca3af"></i>D3 選配：下關</span>
+      <span><i style="background:#7c3aed"></i>D4 別府↔海たまご</span>
+      <span><i style="background:#0891b2"></i>D5 別府→宇佐→博多</span>
+    </div>
+    <div class="map-desc">🗺️ 示意圖，位置與距離僅供參考，實際導航請用 Google Maps。D1、D6 不租車。全程走平地與沿海高速，避開湯布院、九重等山區。</div>
+  </div>
+  <div class="section-title">🚗 行駛時間參考（估計值，未查證）</div>
+  <table>
+    <thead><tr><th>區間</th><th>車程</th></tr></thead>
+    <tbody>
+      <tr><td>博多 → 柳川</td><td>約 1 小時</td></tr>
+      <tr><td>柳川 → 太宰府</td><td>約 50 分</td></tr>
+      <tr><td>太宰府 → 博多</td><td>約 40 分</td></tr>
+      <tr><td>博多 → 下關（選配）</td><td>約 1 小時 10 分</td></tr>
+      <tr><td>下關 → 小倉（選配）</td><td>約 20–30 分</td></tr>
+      <tr><td>博多 → 小倉（不去下關）</td><td>約 1 小時 15 分</td></tr>
+      <tr><td>小倉 → 別府（東九州道）</td><td>約 1.5–2 小時</td></tr>
+      <tr><td>別府 → 海たまご</td><td>約 15 分</td></tr>
+      <tr><td>別府 → 宇佐</td><td>約 50 分</td></tr>
+      <tr><td>宇佐 → 博多（東九州道→九州道）</td><td>約 2 小時</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ==================== TAB 2: ITINERARY ==================== -->
+<div id="tab-itinerary" class="tab-content">
+  <div class="itinerary-nav" id="itin-nav">
+    <a href="javascript:void(0)" onclick="jumpToItinDay('d1', this)" class="active">D1</a>
+    <a href="javascript:void(0)" onclick="jumpToItinDay('d2', this)">D2 🚤</a>
+    <a href="javascript:void(0)" onclick="jumpToItinDay('d3', this)">D3 🏙️</a>
+    <a href="javascript:void(0)" onclick="jumpToItinDay('d4', this)">D4 🐠</a>
+    <a href="javascript:void(0)" onclick="jumpToItinDay('d5', this)">D5 ⛩️</a>
+    <a href="javascript:void(0)" onclick="jumpToItinDay('d6', this)">D6 ✈️</a>
+    <a href="javascript:void(0)" onclick="jumpToItinDay('summary', this)">總覽</a>
+  </div>
+
+<!-- DAY 1 -->
+<div class="day-card" id="d1">
+  <div class="day-header">
+    <div class="day-num">Day<br>1</div>
+    <div class="day-title"><h2>抵達福岡・博多周邊</h2><div class="day-meta">1/21（四）・抵達日（不租車）</div></div>
+  </div>
+  <div class="day-transport">🚇 <strong>地鐵／大型計程車</strong>｜福岡機場 → 博多站 約 5 分｜✈️ 航班：<strong>待確認</strong></div>
+  <div class="schedule">
+    <div class="schedule-row"><div class="time-col">抵達</div><div class="event-col">✈️ 抵達福岡機場，入境・領行李</div></div>
+    <div class="schedule-row"><div class="time-col">交通</div><div class="event-col"><span class="event-tag tag-move">交通</span>6 人加行李，可搭地鐵或叫 <strong>Jumbo Taxi 大型計程車</strong></div></div>
+    <div class="schedule-row"><div class="time-col">午後</div><div class="event-col"><span class="event-tag tag-hotel">住宿</span>入住博多站周邊飯店，先休息</div></div>
+    <div class="schedule-row"><div class="time-col">選擇性</div><div class="event-col"><span class="event-tag tag-sight">景點</span>⛩️ <strong>櫛田神社</strong>、<strong>博多運河城</strong>（計程車約 5 分）；體力時間夠再去</div></div>
+    <div class="schedule-row"><div class="time-col">晚餐</div><div class="event-col"><span class="event-tag tag-food">晚餐</span>🍜 博多站 AMU Plaza、KITTE 美食街（有座位，不用排戶外隊）</div></div>
+  </div>
+  <div class="tips-box"><div class="tips-title">⚠️ 提醒</div>中洲屋台冬天冷、座位窄、常要排隊，不建議帶長輩。早點休息，隔天開始自駕。</div>
+  <div class="hotel-block"><div class="hotel-title">🏨 住宿｜博多（D1–D2 連住，D5 住回同一間）</div>博多站走路 5 分鐘內；D2 晚上要停車，<strong>需有平面或自走式立體停車場</strong>（機械式車位常限高 1.55m，Alphard／Voxy 停不進）；確認可寄放大行李至 D5</div>
+</div>
+
+<!-- DAY 2 -->
+<div class="day-card" id="d2">
+  <div class="day-header">
+    <div class="day-num" style="background:#dc2626">Day<br>2</div>
+    <div class="day-title"><h2>🚤 柳川暖桌遊船 → ⛩️ 太宰府 → 回博多</h2><div class="day-meta">1/22（五）・博多取車・自駕約 2.5 小時</div></div>
+  </div>
+  <div class="day-transport">🚗 <strong>自駕</strong>｜博多 → 柳川約 1 小時 → 太宰府約 50 分 → 回博多約 40 分（估計，九州道＋都市高速）</div>
+  <div class="schedule">
+    <div class="schedule-row"><div class="time-col">09:00</div><div class="event-col"><span class="event-tag tag-move">取車</span>博多站周邊取車（Alphard／Voxy 級）；確認兒童座椅、ETC 卡</div></div>
+    <div class="schedule-row"><div class="time-col">10:30</div><div class="event-col"><span class="event-tag tag-sight">遊船</span>🚤 <strong>柳川暖桌遊船（こたつ舟）</strong>｜冬季限定（12–2 月 09:30–15:00），約 70 分全程坐著、有棉被暖桌；<strong>上船前先上廁所</strong>，可借小靠墊／板凳，或選 30–40 分鐘短程方案</div></div>
+    <div class="schedule-row"><div class="time-col">12:00</div><div class="event-col"><span class="event-tag tag-food">午餐</span>🍱 <strong>鰻魚蒸籠飯</strong>（元祖本吉屋、若松屋等）｜建議預約，<strong>指定「一般桌椅（テーブル席）」</strong>避免久坐塌塌米</div></div>
+    <div class="schedule-row"><div class="time-col">13:30</div><div class="event-col"><span class="event-tag tag-move">交通</span>開車到太宰府（約 50 分）</div></div>
+    <div class="schedule-row"><div class="time-col">14:30</div><div class="event-col"><span class="event-tag tag-sight">神社</span>⛩️ <strong>太宰府天滿宮</strong>｜參道平坦、吃<strong>梅枝餅</strong>；可借輪椅（觀光案內所或天滿宮情報站）。御本殿大改修中，可參觀藤本壯介設計的「森林臨時本殿（仮殿）」</div></div>
+    <div class="schedule-row"><div class="time-col">16:00</div><div class="event-col"><span class="event-tag tag-move">交通</span>開車回博多（約 40 分），傍晚都市高速可能塞車</div></div>
+    <div class="schedule-row"><div class="time-col">晚上</div><div class="event-col"><span class="event-tag tag-food">晚餐</span>回同一間博多飯店，車停飯店或附近平面停車場；晚餐在博多站周邊，行李不用動</div></div>
+  </div>
+  <div class="tips-box"><div class="tips-title">💡 提醒</div>停車：博多站周邊每晚約 ¥1,500–3,000。小雨遊船照常開；大雨可改去御花（立花家庭園）室內參觀。</div>
+  <div class="hotel-block"><div class="hotel-title">🏨 住宿｜博多（同一間，連住第 2 晚）</div>不用搬行李</div>
+</div>
+
+<!-- DAY 3 -->
+<div class="day-card" id="d3">
+  <div class="day-header">
+    <div class="day-num" style="background:#16a34a">Day<br>3</div>
+    <div class="day-title"><h2>（選配：下關）→ 🏙️ 小倉 → ♨️ 別府</h2><div class="day-meta">1/23（六）・自駕約 2.5–3 小時</div></div>
+  </div>
+  <div class="day-transport">🚗 <strong>自駕</strong>｜核心行程為小倉；<strong>下關為選配</strong>，視體力與天氣決定（車程皆為估計，未查證）</div>
+  <div class="schedule">
+    <div class="schedule-row"><div class="time-col">08:45</div><div class="event-col"><span class="event-tag tag-move">出發</span>博多退房，<strong>大行李寄放博多飯店</strong>，只帶 2 晚輕便行李上車；中途可在古賀 SA 休息</div></div>
+    <div class="schedule-row highlight-row"><div class="time-col">選配 A</div><div class="event-col"><span class="event-tag tag-sight">選配</span><strong>含下關</strong>（約 10:00–12:00）｜九州道 → 關門橋到下關（約 1 小時 10 分），停赤間神宮附近停車場 → <strong>日清講和記念館</strong>＋<strong>春帆樓</strong>外觀（馬關條約簽約地）→ <strong>赤間神宮</strong>（三處走路數分鐘；正門有階梯，母親可走右側車道斜坡）。唐戶市場不排。春帆樓用餐需預約、價位偏高；記念館開放時間／票價／冬季公休<strong>未查證</strong></div></div>
+    <div class="schedule-row highlight-row"><div class="time-col">選配 B</div><div class="event-col"><span class="event-tag tag-move">直達</span><strong>不含下關</strong>｜約 11:00 博多直接走九州道到小倉（約 1 小時 15 分），車程較輕鬆</div></div>
+    <div class="schedule-row"><div class="time-col">12:30</div><div class="event-col"><span class="event-tag tag-food">午餐</span>🍜 <strong>小倉</strong>午餐：焼うどん、鐵板料理（有座位的店）</div></div>
+    <div class="schedule-row"><div class="time-col">13:30</div><div class="event-col"><span class="event-tag tag-sight">景點</span>🛍️ <strong>Riverwalk 北九州</strong>（室內商場／漫畫博物館）、小倉城外觀｜全是平地、室內多可坐著休息；小倉城天守有階梯，母親可只在外面看。旦過市場營業狀況未查證</div></div>
+    <div class="schedule-row"><div class="time-col">14:30</div><div class="event-col"><span class="event-tag tag-move">交通</span>東九州道 → 別府（約 1.5–2 小時），沿海路線</div></div>
+    <div class="schedule-row"><div class="time-col">晚上</div><div class="event-col"><span class="event-tag tag-hotel">住宿</span>別府旅館 Check-in，♨️ 泡溫泉</div></div>
+  </div>
+  <div class="tips-box"><div class="tips-title">❄️ 冬季開車</div>福岡 ↔ 別府<strong>一律走沿海的東九州道</strong>，不走經由布院的大分道。出發前一晚查 <strong>JARTIC</strong>、<strong>NEXCO 西日本</strong>。寒流或大雪預報時：省略下關，小倉以室內為主，或提早出發去別府。</div>
+  <div class="hotel-block"><div class="hotel-title">🏨 住宿｜別府（D3–D4，2 晚）</div>溫泉旅館或飯店：有電梯、和洋室（有床）、可預約包租湯、有停車場；可考慮鐵輪（近地獄巡禮）或別府站周邊（吃飯方便）</div>
+</div>
+
+<!-- DAY 4 -->
+<div class="day-card" id="d4">
+  <div class="day-header">
+    <div class="day-num" style="background:#7c3aed">Day<br>4</div>
+    <div class="day-title"><h2>🐠 海たまご → 👹 地獄巡禮 →（自由選）</h2><div class="day-meta">1/24（日）・別府為基地</div></div>
+  </div>
+  <div class="day-transport">🚗 <strong>自駕</strong>｜別府 → 海たまご約 15 分 → 回鐵輪約 30 分（估計）｜全程沿海平地</div>
+  <div class="schedule">
+    <div class="schedule-row"><div class="time-col">09:30</div><div class="event-col"><span class="event-tag tag-move">交通</span>開車到海たまご（週日人多，早點到）</div></div>
+    <div class="schedule-row"><div class="time-col">09:45</div><div class="event-col"><span class="event-tag tag-sight">水族館</span>🐠 <strong>大分海洋宮殿水族館「海たまご」</strong>｜室內、有座位，適合小孩</div></div>
+    <div class="schedule-row"><div class="time-col">12:15</div><div class="event-col"><span class="event-tag tag-food">午餐</span>🍲 <strong>地獄蒸工房 鐵輪</strong>（自己用溫泉蒸氣蒸食物）｜週日熱門、不可預約，<strong>一抵達先派人抽號碼牌</strong>，等待時先逛旁邊的海地獄</div></div>
+    <div class="schedule-row"><div class="time-col">13:30</div><div class="event-col"><span class="event-tag tag-nature">地獄</span>👹 <strong>海地獄</strong>＋<strong>血池地獄</strong>（只挑 2 個，兩地車程約 8 分）｜最平坦且都有<strong>足湯</strong>可坐著泡</div></div>
+    <div class="schedule-row"><div class="time-col">15:00</div><div class="event-col"><span class="event-tag tag-nature">自由選</span>見下方加碼選項，或長輩先回飯店休息、其他人帶小孩去玩</div></div>
+    <div class="schedule-row"><div class="time-col">晚上</div><div class="event-col"><span class="event-tag tag-onsen">溫泉</span>♨️ 飯店晚餐、包租湯</div></div>
+  </div>
+  <div class="tips-box"><div class="tips-title">🎯 下午加碼選項（視天氣與體力）</div>
+    ① <strong>高崎山自然動物園</strong>（海たまご對面）：野生日本獼猴，可搭猴子單軌電車（來回 ¥110）直達山頂，長輩友善<br>
+    ② <strong>別府ラクテンチ</strong>：復古纜車上山，有小動物園；冬季週二三公休，週日正常營業（09:30–16:30）<br>
+    ③ <strong>鶴見岳空中纜車</strong>：山頂 1,300 公尺、可能零下積雪；<strong>路面結冰或強風就不去</strong><br>
+    ④ <strong>別府海浜砂湯</strong>（2025/7 新改建，建議預約）：全程躺著，但<strong>80 歲長輩有心血管風險，砂浴是否適合請先評估</strong>
+  </div>
+  <div class="tips-box"><div class="tips-title">⚠️ 長輩注意</div>大浴場水溫勿太高；纜車山頂冷，備外套、帽子、暖暖包。地獄巡禮太冷時改泡旅館湯或砂湯。</div>
+</div>
+
+<!-- DAY 5 -->
+<div class="day-card" id="d5">
+  <div class="day-header">
+    <div class="day-num" style="background:#0891b2">Day<br>5</div>
+    <div class="day-title"><h2>⛩️ 別府 → 宇佐神宮 → 回博多還車</h2><div class="day-meta">1/25（一）・自駕約 2.5–3 小時</div></div>
+  </div>
+  <div class="day-transport">🚗 <strong>自駕</strong>｜別府 → 宇佐約 50 分 → 博多約 2 小時（<strong>東九州道 → 北九州 → 九州道</strong>；估計）</div>
+  <div class="schedule">
+    <div class="schedule-row"><div class="time-col">上午</div><div class="event-col"><span class="event-tag tag-onsen">溫泉</span>睡晚一點、泡早湯，約 10:30 退房；可順路去別府站附近買伴手禮</div></div>
+    <div class="schedule-row"><div class="time-col">11:00</div><div class="event-col"><span class="event-tag tag-move">交通</span>東九州道北上到宇佐（約 50 分）</div></div>
+    <div class="schedule-row"><div class="time-col">12:00</div><div class="event-col"><span class="event-tag tag-food">午餐</span>🍗 <strong>宇佐炸雞（唐揚げ）</strong>｜日本炸雞發源地之一</div></div>
+    <div class="schedule-row"><div class="time-col">13:30</div><div class="event-col"><span class="event-tag tag-sight">神社</span>⛩️ <strong>宇佐神宮</strong>｜設有<strong>免費單軌斜坡車（09:00–15:30，定員 6 人）</strong>直達上宮；可先致電神宮廳（0978-37-0001）報備車號，將車開到乘車處附近，免走碎石參道與階梯</div></div>
+    <div class="schedule-row"><div class="time-col">15:00</div><div class="event-col"><span class="event-tag tag-move">交通</span>回福岡（約 2 小時）｜<strong>走海岸路線，不走經湯布院的大分道</strong>（冬天山區可能結冰或輪胎管制）</div></div>
+    <div class="schedule-row"><div class="time-col">17:15</div><div class="event-col"><span class="event-tag tag-move">還車</span>博多站周邊還車（先加滿油）；週一傍晚市區可能塞車，時間抓寬</div></div>
+    <div class="schedule-row"><div class="time-col">晚上</div><div class="event-col"><span class="event-tag tag-food">晚餐</span>🍖 水炊雞鍋或牛腸鍋（可預約包廂）</div></div>
+  </div>
+  <div class="tips-box"><div class="tips-title">💡 提醒</div>宇佐神宮太累或時間晚了可取消，直接回福岡、提早還車。</div>
+  <div class="hotel-block"><div class="hotel-title">🏨 住宿｜博多（住回 D1–D2 同一間）</div>還車後才入住，不用停車；取回寄放的大行李</div>
+</div>
+
+<!-- DAY 6 -->
+<div class="day-card" id="d6">
+  <div class="day-header">
+    <div class="day-num" style="background:#4b5563">Day<br>6</div>
+    <div class="day-title"><h2>✈️ 博多購物 → 回程</h2><div class="day-meta">1/26（二）・返程日</div></div>
+  </div>
+  <div class="day-transport">🚇 <strong>地鐵／大型計程車</strong>｜博多 → 福岡機場 約 5 分（國際線需從國內線轉接駁巴士）｜✈️ 航班：<strong>待確認</strong></div>
+  <div class="schedule">
+    <div class="schedule-row"><div class="time-col">上午</div><div class="event-col"><span class="event-tag tag-sight">購物</span>🛍️ 早餐後在博多站最後採買：<strong>明太子</strong>、<strong>通りもん</strong>、<strong>藥妝</strong>、伴手禮</div></div>
+    <div class="schedule-row"><div class="time-col">退稅</div><div class="event-col">辦理免稅商品出境手續請依當時規定與店家說明（日本免稅制度近期調整，出發前確認）</div></div>
+    <div class="schedule-row"><div class="time-col">起飛前 3h</div><div class="event-col"><span class="event-tag tag-move">交通</span>前往機場；<strong>時間抓寬</strong>（國際線接駁）</div></div>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div id="summary">
+<div class="section-title">🏨 住宿總覽</div>
+<table>
+  <thead><tr><th>日期</th><th>地點</th><th>晚數</th><th>建議</th></tr></thead>
+  <tbody>
+    <tr><td>1/21・1/22</td><td>博多</td><td>2 晚</td><td>待訂：站旁 5 分鐘內；有平面／自走式停車場；可寄放大行李至 D5</td></tr>
+    <tr><td>1/23・1/24</td><td>別府</td><td>2 晚</td><td>待訂：鐵輪或別府站周邊；有電梯、和洋室、包租湯、停車場</td></tr>
+    <tr><td>1/25</td><td>博多</td><td>1 晚</td><td>與 D1–D2 同一間，還車後才入住</td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">⛩️ 景點・♨️ 溫泉・主題設施</div>
+<table>
+  <thead><tr><th>類型</th><th>設施</th><th>日期</th><th>備註</th></tr></thead>
+  <tbody>
+    <tr><td>🚤 遊船</td><td>柳川暖桌遊船</td><td>1/22</td><td>冬季限定，約 70 分全程坐著；票價未查證</td></tr>
+    <tr><td>⛩️ 神社</td><td>太宰府天滿宮</td><td>1/22</td><td>免費，參道平坦；御本殿改修中，可看仮殿</td></tr>
+    <tr><td>🏛️ 歷史</td><td>日清講和記念館・春帆樓・赤間神宮（選配）</td><td>1/23</td><td>馬關條約簽約地；開放時間、票價未查證</td></tr>
+    <tr><td>🏙️ 城市</td><td>小倉（Riverwalk、小倉城）</td><td>1/23</td><td>室內為主；小倉城天守有階梯</td></tr>
+    <tr><td>🐠 水族館</td><td>大分海洋宮殿水族館「海たまご」</td><td>1/24</td><td>票價未查證</td></tr>
+    <tr><td>👹 地獄</td><td>海地獄・血池地獄</td><td>1/24</td><td>約 ¥450／處（大人，概估）</td></tr>
+    <tr><td>🎯 加碼</td><td>高崎山／ラクテンチ／鶴見岳纜車／砂湯</td><td>1/24 下午</td><td>擇一，視天氣體力；鶴見岳結冰不去</td></tr>
+    <tr><td>⛩️ 神社</td><td>宇佐神宮</td><td>1/25</td><td>免費單軌斜坡車直達上宮（09:00–15:30）</td></tr>
+    <tr><td>♨️ 溫泉</td><td>別府旅館湯・包租湯</td><td>1/23–24</td><td>住宿含</td></tr>
+  </tbody>
+</table>
+<div class="footer-note">門票為概估，請以官網最新公告為準。</div>
+
+<div class="section-title">⚠️ 重要注意事項</div>
+<div class="warn-grid">
+  <div class="warn-card"><div class="warn-num">①</div><p><strong>避開山區</strong><br>不去湯布院、阿蘇、九重；福岡 ↔ 別府走沿海東九州道，不走大分道</p></div>
+  <div class="warn-card"><div class="warn-num">②</div><p><strong>冬季胎</strong><br>可加訂雪胎（studless）；福岡和大分平地很少積雪，但 1 月偶有寒流。出發前查 JARTIC 與 NEXCO 西日本</p></div>
+  <div class="warn-card"><div class="warn-num">③</div><p><strong>停車限高</strong><br>Alphard／Voxy 車高約 1.9–1.95m，停不進限高 1.55m 的機械式車位；訂博多飯店要確認平面或自走式停車場</p></div>
+  <div class="warn-card"><div class="warn-num">④</div><p><strong>長輩節奏</strong><br>每天只排 1–2 個重點，9:00–9:30 才出發、傍晚 5 點前到飯店；母親不久站，可帶拐杖椅、借輪椅</p></div>
+  <div class="warn-card"><div class="warn-num">⑤</div><p><strong>泡湯安全</strong><br>80 歲長輩水溫勿太高、時間勿太長；砂浴有心血管風險，是否適合請先評估</p></div>
+  <div class="warn-card"><div class="warn-num">⑥</div><p><strong>租車與證件</strong><br>台灣駕照＋<strong>日文譯本</strong>缺一不可；持小型車駕照只能開 9 人座以下（Alphard／Voxy 級）；1/22 博多取車、1/25 同地還車</p></div>
+  <div class="warn-card"><div class="warn-num">⑦</div><p><strong>開車時間</strong><br>每天開車 3 小時內；高速公路休息區每 1–1.5 小時停一次，由經驗多的人開高速路段</p></div>
+  <div class="warn-card"><div class="warn-num">⑧</div><p><strong>預約</strong><br>別府旅館（和洋室＋包租湯）提早訂；鰻魚飯（指定桌椅）、水炊雞鍋、春帆樓（選配）建議預約</p></div>
+  <div class="warn-card"><div class="warn-num">⑨</div><p><strong>鶴見岳纜車</strong><br>D4 加碼選項之一；山頂可能零下積雪，路面結冰或強風就不去</p></div>
+</div>
+
+<div class="section-title">💰 費用概估（6 人）</div>
+<table>
+  <thead><tr><th>項目</th><th>估算（台幣）</th></tr></thead>
+  <tbody>
+    <tr><td>住宿（5 晚，含兩晚別府溫泉旅館）</td><td>待估</td></tr>
+    <tr><td>租車 4 天（1/22–1/25，含燃油・高速・全險・ETC）</td><td>待估</td></tr>
+    <tr><td>停車（博多 1 晚約 ¥1,500–3,000）</td><td>待估</td></tr>
+    <tr><td>飲食（6 天）</td><td>待估</td></tr>
+    <tr><td>門票</td><td>待估</td></tr>
+    <tr><td>地鐵・計程車</td><td>待估</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div style="text-align:center;padding:20px;color:#9ca3af;font-size:0.78rem;">九州 2027 冬季慢遊自駕 · 行程規劃</div>
+</div>
+
+<!-- ==================== TAB 3: CHECKLIST ==================== -->
+<div id="tab-checklist" class="tab-content">
+
+  <div class="section">
+    <div class="section-header">🎫 機票</div>
+    <table>
+      <tr><th>項目</th><th>狀態</th><th>備註</th></tr>
+      <tr><td>去程機票（→福岡）</td><td class="status"><input type="checkbox" id="k-0" data-save="true"> <span class="badge-todo">未訂</span></td><td>1/21，待確認航班</td></tr>
+      <tr><td>回程機票（福岡→）</td><td class="status"><input type="checkbox" id="k-1" data-save="true"> <span class="badge-todo">未訂</span></td><td>1/26，待確認航班</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-header">🏨 住宿</div>
+    <table>
+      <tr><th>項目</th><th>狀態</th><th>備註</th></tr>
+      <tr><td>博多 1/21–22（2晚）</td><td class="status"><input type="checkbox" id="k-2" data-save="true"> <span class="badge-todo">未訂</span></td><td>站旁・有平面停車場・可寄放行李至 D5</td></tr>
+      <tr><td>別府 1/23–24（2晚）</td><td class="status"><input type="checkbox" id="k-4" data-save="true"> <span class="badge-todo">未訂</span></td><td>房內湯或家族湯，早訂</td></tr>
+      <tr><td>博多 1/25（1晚，同一間）</td><td class="status"><input type="checkbox" id="k-5" data-save="true"> <span class="badge-todo">未訂</span></td><td>與 D1–D2 同間</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-header">🚗 租車與證件</div>
+    <table>
+      <tr><th>項目</th><th>狀態</th></tr>
+      <tr><td>租車預約（博多取還，1/22–1/25，Alphard／Voxy 級，9 人座以下）</td><td class="status"><input type="checkbox" id="k-6" data-save="true"></td></tr>
+      <tr><td>加訂雪胎（studless，可選）</td><td class="status"><input type="checkbox" id="k-7" data-save="true"></td></tr>
+      <tr><td>確認博多飯店平面／自走式停車場（車高約 1.9m）</td><td class="status"><input type="checkbox" id="k-41" data-save="true"></td></tr>
+      <tr><td>柳川鰻魚飯訂位（指定桌椅）</td><td class="status"><input type="checkbox" id="k-42" data-save="true"></td></tr>
+      <tr><td>全險（免責補償＋NOC）、ETC 卡、兒童增高墊</td><td class="status"><input type="checkbox" id="k-8" data-save="true"></td></tr>
+      <tr><td>台灣駕照＋日文譯本（監理站申請）</td><td class="status"><input type="checkbox" id="k-9" data-save="true"></td></tr>
+      <tr><td>6 人護照有效期 6 個月以上</td><td class="status"><input type="checkbox" id="k-10" data-save="true"></td></tr>
+      <tr><td>Visit Japan Web 入境登錄</td><td class="status"><input type="checkbox" id="k-11" data-save="true"></td></tr>
+      <tr><td>旅遊保險（含長輩醫療）</td><td class="status"><input type="checkbox" id="k-12" data-save="true"></td></tr>
+      <tr><td>日本 eSIM／網路</td><td class="status"><input type="checkbox" id="k-13" data-save="true"></td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-header">🧳 冬季行李</div>
+    <table>
+      <tr><th>項目</th><th>狀態</th></tr>
+      <tr><td>羽絨外套、發熱衣、圍巾手套</td><td class="status"><input type="checkbox" id="k-14" data-save="true"></td></tr>
+      <tr><td>止滑鞋（雪地防滑）</td><td class="status"><input type="checkbox" id="k-15" data-save="true"></td></tr>
+      <tr><td>暖暖包</td><td class="status"><input type="checkbox" id="k-16" data-save="true"></td></tr>
+      <tr><td>護唇膏、乳液（乾燥）</td><td class="status"><input type="checkbox" id="k-17" data-save="true"></td></tr>
+      <tr><td>泡湯小毛巾、防水收納袋</td><td class="status"><input type="checkbox" id="k-18" data-save="true"></td></tr>
+      <tr><td>充電器、行動電源、車用手機架</td><td class="status"><input type="checkbox" id="k-19" data-save="true"></td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-header">👴 長輩與小孩</div>
+    <table>
+      <tr><th>項目</th><th>狀態</th></tr>
+      <tr><td>長輩常用藥與藥單</td><td class="status"><input type="checkbox" id="k-20" data-save="true"></td></tr>
+      <tr><td>拐杖椅／輪椅租借確認（太宰府、宇佐神宮可借）</td><td class="status"><input type="checkbox" id="k-21" data-save="true"></td></tr>
+      <tr><td>止滑鞋墊、護膝</td><td class="status"><input type="checkbox" id="k-22" data-save="true"></td></tr>
+      <tr><td>暈車藥（長途車程）</td><td class="status"><input type="checkbox" id="k-23" data-save="true"></td></tr>
+      <tr><td>兒童安全座椅（租車時預約）</td><td class="status"><input type="checkbox" id="k-24" data-save="true"></td></tr>
+      <tr><td>小孩娛樂（平板／書）與零食</td><td class="status"><input type="checkbox" id="k-25" data-save="true"></td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-header">🛍️ 伴手禮</div>
+    <table>
+      <tr><th>品項</th><th>購買地點</th><th>狀態</th></tr>
+      <tr><td>通りもん</td><td>博多站／機場</td><td class="status"><input type="checkbox" id="k-26" data-save="true"></td></tr>
+      <tr><td>明太子</td><td>博多站／機場</td><td class="status"><input type="checkbox" id="k-27" data-save="true"></td></tr>
+      <tr><td>梅枝餅</td><td>太宰府（1/22）</td><td class="status"><input type="checkbox" id="k-28" data-save="true"></td></tr>
+      <tr><td>別府溫泉入浴劑（地獄溫泉之花）</td><td>別府（1/24）</td><td class="status"><input type="checkbox" id="k-30" data-save="true"></td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-header">👕 購物清單（衣物・藥妝）</div>
+    <table>
+      <tr><th>品項</th><th>購買地點</th><th>狀態</th></tr>
+      <tr><td>衣物（外套、發熱衣、童裝）</td><td>博多站商場（1/26）</td><td class="status"><input type="checkbox" id="k-36" data-save="true"></td></tr>
+      <tr><td>藥妝（保養、感冒藥、貼布）</td><td>博多站藥妝店（1/26）</td><td class="status"><input type="checkbox" id="k-37" data-save="true"></td></tr>
+      <tr><td>生活雜貨</td><td>博多站商場（1/26）</td><td class="status"><input type="checkbox" id="k-38" data-save="true"></td></tr>
+      <tr><td>藥妝補貨・伴手禮</td><td>博多站（1/26）</td><td class="status"><input type="checkbox" id="k-39" data-save="true"></td></tr>
+      <tr><td>護照（免稅用，隨身帶）</td><td>—</td><td class="status"><input type="checkbox" id="k-40" data-save="true"></td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-header">✅ 出發前最終確認</div>
+    <table>
+      <tr><th>項目</th><th>狀態</th></tr>
+      <tr><td>所有住宿與租車確認信截圖存檔</td><td class="status"><input type="checkbox" id="k-31" data-save="true"></td></tr>
+      <tr><td>出發前查 1/22–1/25 九州道・東九州道天氣與道路情報、柳川遊船／纜車運行</td><td class="status"><input type="checkbox" id="k-32" data-save="true"></td></tr>
+      <tr><td>行程表存至手機離線</td><td class="status"><input type="checkbox" id="k-33" data-save="true"></td></tr>
+      <tr><td>緊急聯絡人通知</td><td class="status"><input type="checkbox" id="k-34" data-save="true"></td></tr>
+      <tr><td>行李重量確認</td><td class="status"><input type="checkbox" id="k-35" data-save="true"></td></tr>
+    </table>
+  </div>
+
+  <div class="footer-note">勾選狀態僅存於此瀏覽器（localStorage），換裝置不會同步。</div>
+</div>
+
+<script>
+  function switchTab(tabId, btnElement) {
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    const buttons = document.querySelectorAll('.nav-btn');
+    buttons.forEach(b => b.classList.remove('active'));
+    const activeTab = document.getElementById(tabId);
+    if (activeTab) activeTab.classList.add('active');
+    if (btnElement) {
+      btnElement.classList.add('active');
+    } else {
+      const idx = { 'tab-dashboard': 0, 'tab-map': 1, 'tab-itinerary': 2, 'tab-checklist': 3 }[tabId] || 0;
+      buttons[idx].classList.add('active');
+    }
+    window.scrollTo(0, 0);
+  }
+
+  function jumpToDay(dayId) {
+    switchTab('tab-itinerary');
+    setTimeout(() => {
+      const el = document.getElementById(dayId);
+      if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); updateItinSubNav(dayId); }
+    }, 100);
+  }
+
+  function jumpToItinDay(dayId, linkElement) {
+    const el = document.getElementById(dayId);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('#itin-nav a').forEach(l => l.classList.remove('active'));
+    if (linkElement) linkElement.classList.add('active');
+  }
+
+  function updateItinSubNav(dayId) {
+    document.querySelectorAll('#itin-nav a').forEach(link => {
+      const href = link.getAttribute('onclick');
+      link.classList.toggle('active', !!(href && href.includes("'" + dayId + "'")));
+    });
+  }
+
+  function safeStorage(fn) { try { return fn(); } catch (e) { return null; } }
+
+  function updateBadgeState(chk) {
+    const td = chk.closest('.status');
+    if (!td) return;
+    const badge = td.querySelector('.badge-done, .badge-todo');
+    if (!badge) return;
+    if (chk.checked) {
+      badge.className = 'badge-done';
+      badge.textContent = badge.textContent.replace('未', '已');
+    } else {
+      badge.className = 'badge-todo';
+      badge.textContent = badge.textContent.replace('已', '未');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('input[type="checkbox"][data-save="true"]').forEach(chk => {
+      const saved = safeStorage(() => localStorage.getItem(chk.id));
+      if (saved !== null) { chk.checked = (saved === 'true'); updateBadgeState(chk); }
+      chk.addEventListener('change', e => {
+        safeStorage(() => localStorage.setItem(chk.id, e.target.checked));
+        updateBadgeState(chk);
+      });
+    });
+
+    window.addEventListener('scroll', () => {
+      const tab = document.getElementById('tab-itinerary');
+      if (!tab.classList.contains('active')) return;
+      let current = 'd1';
+      tab.querySelectorAll('.day-card, #summary').forEach(card => {
+        if (card.getBoundingClientRect().top <= 120) current = card.id;
+      });
+      updateItinSubNav(current);
+    });
+  });
+</script>
+</body>
+</html>
